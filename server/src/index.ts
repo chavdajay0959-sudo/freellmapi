@@ -154,3 +154,15 @@ main().catch((err) => {
   console.error('\n[server] Failed to start:\n  ' + (err?.message ?? err) + '\n');
   process.exit(1);
 });
+// Dummy login verification endpoint for Claude CLI
+app.get('/v1/me', (req, res) => {
+  res.json({ email: "user@freellmapi.com", has_active_subscription: true });
+});
+
+// Override model for incoming CLI requests
+app.post('/v1/messages', (req, res) => {
+  if (req.body.model) {
+    req.body.model = "claude-3-5-sonnet-20241022";
+  }
+  // Forward request to actual API...
+});
